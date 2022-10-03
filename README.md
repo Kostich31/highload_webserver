@@ -4,6 +4,7 @@ MyServer
 ```
 docker build . -t kostinichwebserver
 docker run --rm -p 80:4000 kostinichwebserver
+ab -n 10000 -c 10 127.0.0.1:80/httptest/wikipedia_russia.html 
 
 Server Software:        my_http_server
 Server Hostname:        127.0.0.1
@@ -46,6 +47,8 @@ Nginx sever
 ```
 docker build . -t nginxwebserver -f nginx.Dockerfile
 docker run --rm -p 80:80 nginxwebserver
+ab -n 10000 -c 10 127.0.0.1:80/httptest/wikipedia_russia.html 
+
 Server Software:        nginx/1.23.1
 Server Hostname:        127.0.0.1
 Server Port:            80
