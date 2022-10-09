@@ -1,6 +1,6 @@
 FROM nginx
 
-WORKDIR /app/nginx
+WORKDIR /etc/nginx
 
-COPY nginx.conf /app/nginx
-COPY httptest /app/nginx
+COPY nginx.conf /etc/nginx/nginx.conf
+COPY httptest /etc/nginx/static/httptest

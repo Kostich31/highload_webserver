@@ -8,28 +8,29 @@
 #include <thread>
 #include <chrono>
 
-Server::Server(Config conf)
+Server::Server(Config conf, struct sockaddr_in &saun)
 {
     _conf = conf;
-    _socket = socket(AF_INET, SOCK_STREAM, 0);
+    this->_socket = socket(AF_INET, SOCK_STREAM, 0);
     if (_socket < 0)
     {
         perror("socket");
     }
-};
 
-int Server::InitServer(struct sockaddr_in &saun)
-{
-    int result = bind(_socket, (struct sockaddr *)&saun, sizeof(saun));
+    int result = bind(this->_socket, (struct sockaddr *)&saun, sizeof(saun));
 
     if (result < 0)
     {
         perror("bind");
-
-        return -1;
     }
 
-    result = listen(_socket, _conf.threadsLimit);
+};
+
+int Server::InitServer(struct sockaddr_in &saun)
+{
+    
+
+    int result = listen(this->_socket, this->_conf.threadsLimit);
 
     if (result < 0)
     {
@@ -38,19 +39,19 @@ int Server::InitServer(struct sockaddr_in &saun)
         return -1;
     }
 
-    std::cout << "[LOG] I'm alive!" << std::endl;
-
+    std::cout << "IT is ALIVE" << std::endl;
     return 0;
 };
 
 void Server::WaitingForAccept()
 {
+    std::cout << "PID id: " << getpid() << std::endl;
     while (true)
     {
         struct sockaddr_un addrConnected;
         socklen_t len = sizeof(addrConnected);
 
-        int clientAddress = accept(_socket, (struct sockaddr *)&addrConnected, &len);
+        int clientAddress = accept(this->_socket, (struct sockaddr *)&addrConnected, &len);
         if (clientAddress < 0)
         {
             perror("accept");
@@ -60,7 +61,6 @@ void Server::WaitingForAccept()
             ReadData(clientAddress);
         }
     }
-    WaitingForAccept();
 };
 
 void Server::ReadData(int clientAddress)
@@ -71,7 +71,6 @@ void Server::ReadData(int clientAddress)
     {
         perror("recv");
     }
-
     HTTPRequest request = parseHTTP(recievedData);
     std::thread clientRequestThread(&Server::Response, this, clientAddress, request);
     clientRequestThread.detach();
@@ -104,7 +103,7 @@ void Server::Response(int clientAddress, HTTPRequest clientRequest)
                 {
                     response.data = message;
                 }
-                std::cout << "[LOG] File was read: " << clientRequest.path << std::endl;
+                // std::cout << "[LOG] File was read: " << clientRequest.path << std::endl;
             }
             response.contentType = getContentType(clientRequest.path);
         }

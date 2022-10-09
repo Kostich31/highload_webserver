@@ -98,9 +98,8 @@ cpulimit -p PID -l %
 ab -n 10000 -c 10 127.0.0.1:4000/httptest/
 ```
 
-|CPU usage(persentages) | Requests count|
-|--|--|
-25% | 110
-50% | 184
-75% | 264
-100% | 317
+|Count of processes | My Server requests count|Nginx requests count |
+|--|--|--|
+1 | 469 | 2148
+2 | 643 | 2302
+4 | 762 | 2310

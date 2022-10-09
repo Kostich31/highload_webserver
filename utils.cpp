@@ -13,10 +13,18 @@ Config parseConfig(const std::string &path)
     Config conf;
 
     std::ifstream configurationOfServer(path);
-    std::string buf1, buf2;
+    int buf1, buf2;
+    std::string  buf3;
 
-    configurationOfServer >> buf1 >> conf.threadsLimit >> buf2 >> conf.documentRoot;
-    std::cout << "[LOG] Count thread: " << conf.threadsLimit << std::endl
+    configurationOfServer >> buf1;
+    configurationOfServer >> buf2;
+    configurationOfServer >> buf3;
+    conf.cpuLimit = buf1;
+    conf.threadsLimit = buf2;
+    conf.documentRoot = buf3;
+
+    std::cout << "[LOG] CPU limit: " << conf.cpuLimit << std::endl
+              << "[LOG] Count thread: " << conf.threadsLimit << std::endl
               << "[LOG] Root directory: " << conf.documentRoot << std::endl;
 
     configurationOfServer.close();
@@ -32,8 +40,8 @@ HTTPRequest parseHTTP(std::string request)
     ss >> parsedRequest.method;
     ss >> parsedRequest.path;
     ss >> parsedRequest.protocol;
-    
-    std::cout << "[LOG] Parsed data: " << parsedRequest.method << " " << parsedRequest.path << " " << parsedRequest.protocol << std::endl;
+
+    // std::cout << "[LOG] Parsed data: " << parsedRequest.method << " " << parsedRequest.path << " " << parsedRequest.protocol << std::endl;
     return parsedRequest;
 }
 
@@ -59,7 +67,7 @@ std::string encodeUrl(std::string url)
     {
         encodedUrl.erase(encodedUrl.find('?'));
     }
-    std::cout << "[LOG] Encoded url: " << encodedUrl << std::endl;
+    // std::cout << "[LOG] Encoded url: " << encodedUrl << std::endl;
     return encodedUrl;
 }
 
@@ -158,10 +166,10 @@ std::string getCodeDescription(int code)
 std::string getStringFromHTTPResponse(HTTPResponse response)
 {
     std::string httpResponse = response.protocol + " " + std::to_string(response.code) + " " +
-                         getCodeDescription(response.code) + "\r\n" +
-                         "Version: HTTP/1.1\r\n" +
-                         "Connection: " + response.connection + "\r\n" +
-                         "Server: " + response.server + "\r\n";
+                               getCodeDescription(response.code) + "\r\n" +
+                               "Version: HTTP/1.1\r\n" +
+                               "Connection: " + response.connection + "\r\n" +
+                               "Server: " + response.server + "\r\n";
     auto time = std::chrono::system_clock::to_time_t(std::chrono::system_clock::now());
 
     httpResponse += "Date: " + std::string(ctime(&time));

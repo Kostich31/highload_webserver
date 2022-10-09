@@ -9,12 +9,13 @@
 #include <string>
 #include <netinet/in.h>
 #include <arpa/inet.h>
+#include <vector>
 
 class Server
 {
 
 public:
-    Server(Config conf);
+    Server(Config conf, struct sockaddr_in &saun);
 
     ~Server();
 
@@ -23,10 +24,13 @@ public:
     void WaitingForAccept();
 
 private:
+    int CreateWorkers();
     void ReadData(int addressConnnected);
 
     void Response(int addressConnnected, HTTPRequest message);
 
     int _socket;
+    std::vector<int> sockets;
     Config _conf;
+    int countOfThreadsAlive = 0;
 };

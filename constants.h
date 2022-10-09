@@ -5,6 +5,7 @@ const std::string configPath = "../httpd.conf";
 
 const int MAX_MESSAGE_SIZE = 10000;
 const int DEFAULT_CODE = 0;
+const int CPULIMIT = 8;
 enum supportedCodes
 {
     OK = 200,
@@ -15,6 +16,7 @@ enum supportedCodes
 
 struct Config
 {
+    int cpuLimit;
     int threadsLimit;
     std::string documentRoot;
 };
