@@ -88,3 +88,19 @@ Percentage of the requests served within a certain time (ms)
   99%     14
  100%    520 (longest request)
 ```
+Тестирование количества обрабатываемых запросов при ограничении CPU
+
+```
+top
+
+cpulimit -p PID -l %
+
+ab -n 10000 -c 10 127.0.0.1:4000/httptest/
+```
+
+|CPU usage(persentages) | Requests count|
+|--|--|
+25% | 110
+50% | 184
+75% | 264
+100% | 317
