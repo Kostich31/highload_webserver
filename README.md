@@ -91,11 +91,10 @@ Percentage of the requests served within a certain time (ms)
 Тестирование количества обрабатываемых запросов при ограничении CPU
 
 ```
-top
 
-cpulimit -p PID -l %
+ab -n 10000 -c 256 127.0.0.1:4000/httptest/wikipedia_russia.html 
+ab -n 10000 -c 256 127.0.0.1:80/wikipedia_russia.html 
 
-ab -n 10000 -c 10 127.0.0.1:4000/httptest/
 ```
 
 |Count of processes | My Server requests count|Nginx requests count |
